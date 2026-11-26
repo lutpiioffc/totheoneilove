@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WILL YOU BE MINE? ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink-rose: #ff5c8a;
+            --pink-deep: #d6336c;
+            --purple-soft: #9d4edd;
+            --purple-deep: #5a189a;
+            --white-glass: rgba(255, 255, 255, 0.86);
+            --text-main: #4a1c40;
+            --text-muted: #7a446d;
+            --shadow-card: 0 18px 42px rgba(90, 24, 154, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            min-height: 100dvh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #ffccd5 0%, #ff8fab 45%, #c77dff 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Background Canvas: Falling Hearts & Twinkling Stars */
+        #bg-effects-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Confetti & Heart Burst Layer */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        /* Top Navigation Header */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 30;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .brand-logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--pink-deep);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-pill-btn {
+            padding: 7px 13px;
+            border-radius: 99px;
+            border: 1.5px solid rgba(214, 51, 108, 0.35);
+            background: #fff;
+            color: var(--pink-deep);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(214, 51, 108, 0.12);
+            transition: all 0.25s ease;
+        }
+
+        .nav-pill-btn.active {
+            background: linear-gradient(135deg, var(--pink-rose), var(--purple-soft));
+            color: #fff;
+            border-color: transparent;
+        }
+
+        /* Main Stage */
+        .app-stage {
+            position: relative;
+            z-index: 10;
+            min-height: 100dvh;
+            padding: 80px 16px 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-view {
+            display: none;
+            width: 100%;
+            max-width: 490px;
+            animation: pageFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .page-view.active {
+            display: block;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .glass-card {
+            background: var(--white-glass);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 2px solid rgba(255, 255, 255, 0.92);
+            border-radius: 28px;
+            padding: 28px 22px;
+            text-align: center;
+            box-shadow: var(--shadow-card);
+        }
+
+        /* HALAMAN UTAMA */
+        .floating-hearts-icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            animation: floatBounce 2.8s ease-in-out infinite;
+        }
+
+        @keyframes floatBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(28px, 6.5vw, 38px);
+            color: var(--pink-deep);
+            line-height: 1.25;
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        /* Penghitung Waktu Sejak Pertama Kenal */
+        .timer-widget {
+            background: rgba(255, 255, 255, 0.72);
+            border: 1.5px solid rgba(255, 143, 171, 0.45);
+            border-radius: 20px;
+            padding: 14px 12px;
+            margin-bottom: 22px;
+        }
+
+        .timer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--purple-deep);
+        }
+
+        .edit-date-btn {
+            background: #f3e8ff;
+            border: none;
+            color: var(--purple-deep);
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .time-box {
+            background: linear-gradient(145deg, #fff0f5, #f3e8ff);
+            border-radius: 12px;
+            padding: 8px 4px;
+        }
+
+        .time-box strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pink-deep);
+        }
+
+        .time-box span {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .date-picker-row {
+            margin-top: 10px;
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .date-picker-row input {
+            padding: 6px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--pink-rose);
+            font-size: 12px;
+            color: var(--text-main);
+        }
+
+        .date-picker-row button {
+            padding: 6px 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--pink-deep);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-primary-love {
+            width: 100%;
+            padding: 16px 22px;
+            border: none;
+            border-radius: 99px;
+            background: linear-gradient(135deg, #ff5c8a 0%, #9d4edd 100%);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            box-shadow: 0 10px 26px rgba(157, 78, 221, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary-love:active {
+            transform: scale(0.96);
+        }
+
+        .quick-links-row {
+            margin-top: 14px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .btn-secondary-soft {
+            padding: 11px 18px;
+            border-radius: 99px;
+            border: 1.5px solid rgba(157, 78, 221, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--purple-deep);
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* HALAMAN SURAT */
+        .step-badge {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 99px;
+            background: #f3e8ff;
+            color: var(--purple-deep);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            margin-bottom: 10px;
+        }
+
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 25px;
+            color: var(--pink-deep);
+            margin-bottom: 16px;
+        }
+
+        .letter-box {
+            text-align: left;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1.5px solid rgba(255, 143, 171, 0.45);
+            border-radius: 20px;
+            padding: 22px 18px;
+            font-size: 15.5px;
+            line-height: 1.8;
+            color: var(--text-main);
+            min-height: 195px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 20px rgba(255, 204, 213, 0.3);
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 18px;
+            background: var(--pink-deep);
+            vertical-align: middle;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* HALAMAN PERTANYAAN */
+        .question-big-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(26px, 6.5vw, 35px);
+            color: var(--pink-deep);
+            line-height: 1.3;
+            margin: 10px 0 24px;
+        }
+
+        .choice-buttons-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-yes-love {
+            width: 100%;
+            padding: 17px;
+            border: none;
+            border-radius: 99px;
+            background: linear-gradient(135deg, #ff4d8d, #9d4edd);
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 12px 28px rgba(255, 77, 141, 0.4);
+            animation: pulseHeart 1.8s infinite;
+        }
+
+        @keyframes pulseHeart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .btn-no-polite {
+            width: 100%;
+            padding: 14px;
+            border-radius: 99px;
+            border: 1.5px solid #cbd5e1;
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--text-muted);
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* HASIL JAWABAN */
+        .celebration-banner {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 6vw, 32px);
+            color: var(--pink-deep);
+            line-height: 1.35;
+            margin: 12px 0 16px;
+        }
+
+        .romantic-orbit {
+            font-size: 46px;
+            margin: 10px 0;
+            animation: beatGlow 1.2s infinite;
+        }
+
+        @keyframes beatGlow {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            50% { transform: scale(1.06); }
+            75% { transform: scale(1.25); }
+        }
+
+        .gentle-reply-text {
+            font-size: 16.5px;
+            line-height: 1.75;
+            color: var(--text-main);
+            margin: 14px 0 22px;
+        }
+
+        /* GALERI FOTO KENANGAN */
+        .upload-memory-label {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ff759f, #b565f2);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+
+        .memories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .memory-polaroid {
+            background: #fff;
+            padding: 8px 8px 12px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(74, 28, 64, 0.12);
+            transition: transform 0.25s;
+            cursor: pointer;
+        }
+
+        .memory-polaroid:active {
+            transform: scale(1.05);
+        }
+
+        .memory-img-wrap {
+            width: 100%;
+            height: 130px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ffe3ec, #f3e8ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .memory-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .memory-caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 17px;
+            color: var(--pink-deep);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Falling Hearts & Twinkling Stars -->
+    <canvas id="bg-effects-canvas"></canvas>
+    <!-- Foreground Confetti & Heart Celebration -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+        <div class="brand-logo">WILL YOU BE MINE? ❤️</div>
+        <div class="nav-actions">
+            <button id="btn-nav-back" class="nav-pill-btn hidden">← Kembali</button>
+            <button id="btn-music-toggle" class="nav-pill-btn">Musik: OFF 🎵</button>
+        </div>
+    </header>
+
+    <main class="app-stage">
+        <!-- 1. HALAMAN UTAMA -->
+        <section id="view-home" class="page-view active">
+            <div class="glass-card">
+                <div class="floating-hearts-icon">💖✨🌸✨💖</div>
+                <h1 class="hero-title">Hai, seseorang yang spesial ❤️</h1>
+                <p class="hero-subtitle">Ada sesuatu yang ingin aku sampaikan kepadamu...</p>
+
+                <!-- Penghitung Waktu Sejak Pertama Kenal -->
+                <div class="timer-widget">
+                    <div class="timer-header">
+                        <span>⏳ Waktu Sejak Pertama Kenal</span>
+                        <button type="button" id="btn-toggle-date-edit" class="edit-date-btn">Atur Tanggal</button>
+                    </div>
+                    <div class="timer-grid">
+                        <div class="time-box"><strong id="t-days">0</strong><span>Hari</span></div>
+                        <div class="time-box"><strong id="t-hours">0</strong><span>Jam</span></div>
+                        <div class="time-box"><strong id="t-mins">0</strong><span>Menit</span></div>
+                        <div class="time-box"><strong id="t-secs">0</strong><span>Detik</span></div>
+                    </div>
+                    <div id="date-edit-box" class="date-picker-row hidden">
+                        <input type="date" id="first-met-date-input">
+                        <button type="button" id="btn-save-met-date">Simpan</button>
+                    </div>
+                </div>
+
+                <button id="btn-open-message" class="btn-primary-love">
+                    Buka Pesan 💌
+                </button>
+
+                <div class="quick-links-row">
+                    <button id="btn-open-gallery" class="btn-secondary-soft">
+                        📸 Galeri Foto Kenangan
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. HALAMAN SURAT -->
+        <section id="view-letter" class="page-view">
+            <div class="glass-card">
+                <span class="step-badge">PESAN DARI HATI</span>
+                <h2 class="section-heading">Untuk Kamu yang Spesial 💌</h2>
+
+                <div class="letter-box">
+                    <span id="typed-letter-text"></span><span class="cursor-blink" id="typing-cursor"></span>
+                </div>
+
+                <button id="btn-to-question" class="btn-primary-love hidden">
+                    Lanjut ke Pertanyaan Penting ❤️
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. HALAMAN PERTANYAAN -->
+        <section id="view-question" class="page-view">
+            <div class="glass-card">
+                <div class="floating-hearts-icon">🌹💍🌹</div>
+                <span class="step-badge">SATU PERTANYAAN TERPENTING</span>
+                <h1 class="question-big-title">MAUKAH KAMU MENJADI PACARKU? ❤️</h1>
+
+                <div class="choice-buttons-group">
+                    <button id="btn-answer-yes" class="btn-yes-love">
+                        IYA, AKU MAU ❤️
+                    </button>
+                    <button id="btn-answer-no" class="btn-no-polite">
+                        MAAF, BELUM BISA 🥺
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4A. HASIL JIKA MEMILIH IYA -->
+        <section id="view-result-yes" class="page-view">
+            <div class="glass-card">
+                <div class="romantic-orbit">💖🎉❤️🎉💖</div>
+                <h1 class="celebration-banner">YEEEAY! SEKARANG KITA PUNYA CERITA BERSAMA! ❤️</h1>
+                <p class="hero-subtitle">Terima kasih sudah menerima perasaanku. Mari kita buat banyak kenangan indah bersama mulai hari ini! ✨</p>
+
+                <div class="choice-buttons-group">
+                    <button id="btn-more-confetti" class="btn-primary-love">
+                        Rayakan Lagi dengan Hati & Confetti 🎊
+                    </button>
+                    <button id="btn-yes-gallery" class="btn-secondary-soft">
+                        📸 Simpan Foto Kenangan Kita
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4B. HASIL JIKA MEMILIH BELUM BISA -->
+        <section id="view-result-no" class="page-view">
+            <div class="glass-card">
+                <div class="floating-hearts-icon">🌷🤍🌷</div>
+                <p class="gentle-reply-text">
+                    "Tidak apa-apa, aku tetap menghargai jawabanmu. Terima kasih sudah membaca suratku. ❤️"
+                </p>
+                <button id="btn-back-home-gentle" class="btn-secondary-soft">
+                    Kembali ke Halaman Utama 🏠
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. GALERI FOTO KENANGAN -->
+        <section id="view-gallery" class="page-view">
+            <div class="glass-card">
+                <span class="step-badge">MOMEN INDAH</span>
+                <h2 class="section-heading">Galeri Foto Kenangan 📸</h2>
+                <p class="hero-subtitle" style="margin-bottom: 14px; font-size: 13.5px;">
+                    Tambahkan foto kenangan bersama dari galeri HP kamu:
+                </p>
+
+                <label class="upload-memory-label">
+                    ➕ Tambah Foto Kenangan
+                    <input type="file" id="memory-upload-input" accept="image/*" class="hidden">
+                </label>
+
+                <div class="memories-grid" id="memories-grid"></div>
+
+                <button id="btn-gallery-done" class="btn-primary-love">
+                    Kembali ❤️
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // ================= EXACT LOVE LETTER CONTENT =================
+        const LETTER_MESSAGE = "Sejak mengenalmu, ada sesuatu yang berbeda dalam hari-hariku. Kamu adalah seseorang yang membuat hari biasa terasa istimewa. Aku tidak tahu bagaimana masa depan nanti, tetapi aku ingin mencoba menjalani cerita indah bersamamu.";
+
+        // ================= OFFLINE AUDIO ENGINE (CLICK SFX & ROMANTIC BGM) =================
+        let audioCtx = null;
+        let isMusicPlaying = false;
+        let bgmInterval = null;
+
+        const ROMANTIC_NOTES = [
+            523.25, 659.25, 783.99, 1046.50, 987.77, 783.99, 659.25, 587.33,
+            698.46, 880.00, 1046.50, 987.77, 783.99, 659.25, 587.33, 523.25
+        ];
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playClickSound() {
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(740, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1046.5, audioCtx.currentTime + 0.09);
+
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.13);
+            } catch (e) {}
+        }
+
+        function playMusicTone(freq) {
+            try {
+                initAudio();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.065, audioCtx.currentTime + 0.07);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.05);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.1);
+            } catch (e) {}
+        }
+
+        function toggleBackgroundMusic() {
+            const btn = document.getElementById('btn-music-toggle');
+            if (isMusicPlaying) {
+                isMusicPlaying = false;
+                clearInterval(bgmInterval);
+                btn.classList.remove('active');
+                btn.textContent = 'Musik: OFF 🎵';
+            } else {
+                isMusicPlaying = true;
+                btn.classList.add('active');
+                btn.textContent = 'Musik: ON 🎶';
+                let step = 0;
+                playMusicTone(ROMANTIC_NOTES[step++]);
+                bgmInterval = setInterval(() => {
+                    if (!isMusicPlaying) return;
+                    playMusicTone(ROMANTIC_NOTES[step % ROMANTIC_NOTES.length]);
+                    step++;
+                }, 620);
+            }
+        }
+
+        // Attach click sound to all buttons automatically
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('button') || e.target.closest('label')) {
+                playClickSound();
+            }
+        });
+
+        document.getElementById('btn-music-toggle').addEventListener('click', toggleBackgroundMusic);
+
+        // ================= BACKGROUND FALLING HEARTS & TWINKLING STARS =================
+        const bgCanvas = document.getElementById('bg-effects-canvas');
+        const bgCtx = bgCanvas.getContext('2d');
+        let fallingHearts = [];
+        let twinklingStars = [];
+
+        function resizeCanvases() {
+            bgCanvas.width = window.innerWidth;
+            bgCanvas.height = window.innerHeight;
+            confCanvas.width = window.innerWidth;
+            confCanvas.height = window.innerHeight;
+        }
+
+        const confCanvas = document.getElementById('confetti-canvas');
+        const confCtx = confCanvas.getContext('2d');
+        window.addEventListener('resize', resizeCanvases);
+        resizeCanvases();
+
+        const HEART_EMOJIS = ['❤️', '💗', '💖', '💕', '🌸'];
+        for (let i = 0; i < 28; i++) {
+            fallingHearts.push({
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                size: 14 + Math.random() * 14,
+                vy: 0.7 + Math.random() * 1.4,
+                vx: (Math.random() - 0.5) * 0.7,
+                emoji: HEART_EMOJIS[Math.floor(Math.random() * HEART_EMOJIS.length)],
+                alpha: 0.45 + Math.random() * 0.55
+            });
+        }
+
+        for (let i = 0; i < 45; i++) {
+            twinklingStars.push({
+                x: Math.random() * bgCanvas.width,
+                y: Math.random() * bgCanvas.height,
+                r: 1 + Math.random() * 2.2,
+                phase: Math.random() * Math.PI * 2,
+                speed: 0.03 + Math.random() * 0.04
+            });
+        }
+
+        function animateBackground() {
+            bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+
+            // Twinkling Stars
+            twinklingStars.forEach(s => {
+                s.phase += s.speed;
+                const alpha = 0.25 + 0.75 * Math.abs(Math.sin(s.phase));
+                bgCtx.beginPath();
+                bgCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                bgCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                bgCtx.fill();
+            });
+
+            // Falling Hearts
+            fallingHearts.forEach(h => {
+                bgCtx.globalAlpha = h.alpha;
+                bgCtx.font = `${h.size}px serif`;
+                bgCtx.fillText(h.emoji, h.x, h.y);
+                h.y += h.vy;
+                h.x += h.vx + Math.sin(h.y * 0.02) * 0.35;
+                if (h.y > bgCanvas.height + 24) {
+                    h.y = -20;
+                    h.x = Math.random() * bgCanvas.width;
+                }
+            });
+            bgCtx.globalAlpha = 1;
+            requestAnimationFrame(animateBackground);
+        }
+        animateBackground();
+
+        // ================= CONFETTI & HEARTS CELEBRATION ANIMATION =================
+        let confettiPieces = [];
+        let confettiAnimId = null;
+
+        function launchConfettiAndHearts() {
+            const colors = ['#ff4d8d', '#ff8fab', '#c77dff', '#ffd166', '#ffffff'];
+            for (let i = 0; i < 120; i++) {
+                const isHeart = i % 3 === 0;
+                confettiPieces.push({
+                    x: Math.random() * confCanvas.width,
+                    y: -20 - Math.random() * 200,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: 2.5 + Math.random() * 4.5,
+                    size: isHeart ? 18 : 8 + Math.random() * 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    isHeart,
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 8
+                });
+            }
+            if (!confettiAnimId) renderConfettiLoop();
+        }
+
+        function renderConfettiLoop() {
+            confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+            confettiPieces.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.rotSpeed;
+
+                if (p.isHeart) {
+                    confCtx.font = `${p.size}px serif`;
+                    confCtx.fillText('❤️', p.x, p.y);
+                } else {
+                    confCtx.save();
+                    confCtx.translate(p.x, p.y);
+                    confCtx.rotate((p.rotation * Math.PI) / 180);
+                    confCtx.fillStyle = p.color;
+                    confCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                    confCtx.restore();
+                }
+            });
+
+            confettiPieces = confettiPieces.filter(p => p.y < confCanvas.height + 40);
+            if (confettiPieces.length > 0) {
+                confettiAnimId = requestAnimationFrame(renderConfettiLoop);
+            } else {
+                confettiAnimId = null;
+            }
+        }
+
+        // ================= VIEW NAVIGATION & BACK HISTORY =================
+        let viewHistory = ['view-home'];
+
+        function navigateTo(viewId, pushHistory = true) {
+            document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            if (pushHistory && viewHistory[viewHistory.length - 1] !== viewId) {
+                viewHistory.push(viewId);
+            }
+
+            const backBtn = document.getElementById('btn-nav-back');
+            backBtn.classList.toggle('hidden', viewHistory.length <= 1 || viewId === 'view-home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('btn-nav-back').addEventListener('click', () => {
+            if (viewHistory.length > 1) {
+                viewHistory.pop();
+                const prev = viewHistory[viewHistory.length - 1];
+                navigateTo(prev, false);
+            }
+        });
+
+        // ================= PENGHITUNG WAKTU SEJAK PERTAMA KENAL =================
+        let firstMetTimestamp = localStorage.getItem('wybm_first_met') || '2026-01-01';
+        document.getElementById('first-met-date-input').value = firstMetTimestamp;
+
+        function updateLoveTimer() {
+            const start = new Date(firstMetTimestamp + 'T00:00:00').getTime();
+            const now = Date.now();
+            const diff = Math.max(0, now - start);
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('t-days').textContent = days;
+            document.getElementById('t-hours').textContent = hours;
+            document.getElementById('t-mins').textContent = mins;
+            document.getElementById('t-secs').textContent = secs;
+        }
+        setInterval(updateLoveTimer, 1000);
+        updateLoveTimer();
+
+        document.getElementById('btn-toggle-date-edit').addEventListener('click', () => {
+            document.getElementById('date-edit-box').classList.toggle('hidden');
+        });
+
+        document.getElementById('btn-save-met-date').addEventListener('click', () => {
+            const val = document.getElementById('first-met-date-input').value;
+            if (val) {
+                firstMetTimestamp = val;
+                localStorage.setItem('wybm_first_met', val);
+                updateLoveTimer();
+                document.getElementById('date-edit-box').classList.add('hidden');
+            }
+        });
+
+        // ================= HALAMAN UTAMA -> HALAMAN SURAT (TYPING EFFECT) =================
+        let typingInterval = null;
+
+        document.getElementById('btn-open-message').addEventListener('click', () => {
+            if (!isMusicPlaying) toggleBackgroundMusic();
+            navigateTo('view-letter');
+            startLetterTypewriter();
+        });
+
+        function startLetterTypewriter() {
+            if (typingInterval) clearInterval(typingInterval);
+            const textEl = document.getElementById('typed-letter-text');
+            const cursorEl = document.getElementById('typing-cursor');
+            const nextBtn = document.getElementById('btn-to-question');
+
+            textEl.textContent = '';
+            cursorEl.classList.remove('hidden');
+            nextBtn.classList.add('hidden');
+
+            let idx = 0;
+            typingInterval = setInterval(() => {
+                textEl.textContent += LETTER_MESSAGE.charAt(idx);
+                idx++;
+                if (idx >= LETTER_MESSAGE.length) {
+                    clearInterval(typingInterval);
+                    cursorEl.classList.add('hidden');
+                    nextBtn.classList.remove('hidden');
+                }
+            }, 34);
+        }
+
+        // ================= HALAMAN SURAT -> HALAMAN PERTANYAAN =================
+        document.getElementById('btn-to-question').addEventListener('click', () => {
+            navigateTo('view-question');
+        });
+
+        // ================= PILIHAN JAWABAN (IYA vs BELUM BISA) =================
+        document.getElementById('btn-answer-yes').addEventListener('click', () => {
+            navigateTo('view-result-yes');
+            launchConfettiAndHearts();
+        });
+
+        document.getElementById('btn-more-confetti').addEventListener('click', () => {
+            launchConfettiAndHearts();
+        });
+
+        document.getElementById('btn-answer-no').addEventListener('click', () => {
+            navigateTo('view-result-no');
+        });
+
+        document.getElementById('btn-back-home-gentle').addEventListener('click', () => {
+            viewHistory = ['view-home'];
+            navigateTo('view-home', false);
+        });
+
+        // ================= GALERI FOTO KENANGAN =================
+        const DEFAULT_MEMORIES = [
+            { emoji: '💑', caption: 'Awal Cerita Kita ❤️', img: null },
+            { emoji: '🌸', caption: 'Senyum Favoritku ✨', img: null },
+            { emoji: '🌷', caption: 'Momen Bahagia 💕', img: null },
+            { emoji: '💖', caption: 'Selalu Spesial 💗', img: null }
+        ];
+
+        function renderMemoriesGallery() {
+            const grid = document.getElementById('memories-grid');
+            const saved = JSON.parse(localStorage.getItem('wybm_memories') || 'null');
+            const list = saved && saved.length ? saved : DEFAULT_MEMORIES;
+            grid.innerHTML = '';
+
+            list.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'memory-polaroid';
+                card.innerHTML = `
+                    <div class="memory-img-wrap">
+                        ${item.img ? `<img src="${item.img}" alt="Kenangan">` : item.emoji}
+                    </div>
+                    <div class="memory-caption">${item.caption}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.getElementById('memory-upload-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const saved = JSON.parse(localStorage.getItem('wybm_memories') || 'null') || [...DEFAULT_MEMORIES];
+                saved.unshift({
+                    emoji: '❤️',
+                    caption: 'Kenangan Indah Kita ❤️',
+                    img: ev.target.result
+                });
+                localStorage.setItem('wybm_memories', JSON.stringify(saved));
+                renderMemoriesGallery();
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('btn-open-gallery').addEventListener('click', () => {
+            renderMemoriesGallery();
+            navigateTo('view-gallery');
+        });
+
+        document.getElementById('btn-yes-gallery').addEventListener('click', () => {
+            renderMemoriesGallery();
+            navigateTo('view-gallery');
+        });
+
+        document.getElementById('btn-gallery-done').addEventListener('click', () => {
+            document.getElementById('btn-nav-back').click();
+        });
+    </script>
+</body>
+</html>
